@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        input{width:80px;text-align: right;}
+        td{padding:5px}
+    </style>
 </head>
 <body>  
     <table>
@@ -14,31 +18,33 @@
 
         </tr>
     </table>
-    <h2>PROYECTO: CALCULADORA FINANCIERA</h2>     
-
-    <p>Mide la eficiencia en la administración financiera de su empresa.</p>
-
-    <p><b>INGRESE LA SIGUIENTE INFORMACIÓN:</b></p>
-
+    
+    <h1>PROYECTO: CALCULADORA FINANCIERA</h1> 
+    <h3>Mide la eficiencia en la administración financiera de su empresa.</h3>
     <table>
         <tr>
             <td>
                 <table>
                     <tr>
-                        <td>VENTAS o INGRESOS NETOS</td>
-                        <td><input type="number" id="ventas" value="0"></td>
+                        <td colspan="2">
+                            <b>INGRESE LA SIGUIENTE INFORMACIÓN:</b>
+                        </td>
                     </tr>
                     <tr>
-                        <td>GASTOS y COSTOS TOTALES</td>
-                        <td><input type="number" id="gastos" value="0"></td>
+                        <td>VENTAS o INGRESOS NETOS USD</td>
+                        <td><input type="number" id="ventas" value="14400"></td>
                     </tr>
                     <tr>
-                        <td>ACTIVOS o BIENES PROPIOS</td>
-                        <td><input type="number" id="activos" value="0"></td>
+                        <td>GASTOS y COSTOS TOTALES USD</td>
+                        <td><input type="number" id="gastos" value="14000"></td>
                     </tr>
                     <tr>
-                        <td>PASIVOS o DEUDAS</td>
-                        <td><input type="number" id="pasivos" value="0"></td>
+                        <td>ACTIVOS o BIENES PROPIOS USD</td>
+                        <td><input type="number" id="activos" value="25000"></td>
+                    </tr>
+                    <tr>
+                        <td>PASIVOS o DEUDAS USD</td>
+                        <td><input type="number" id="pasivos" value="20000"></td>
                     </tr>
                     <tr>
                         <td>% TASA DE INTERÉS BANCO</td>
@@ -50,53 +56,124 @@
                     </tr>
                     <tr>
                         <td>% TASA DE GANANCIA ESPERADA</td>
-                        <td><input type="number" id="gananacia" value="0"></td>
+                        <td><input type="number" id="ganancia" value="0"></td>
                     </tr>
             
                 </table>
             </td>
 
-            <td>
-                <button>Calcular</button>
+            <td style="padding:10px;text-align:center;">
+
+                <button onclick="calcular()">CALCULAR</button>
                 <br><br>
-                <button>Limpiar Datos</button>
+                <button onclick="limpiar()">LIMPIAR</button>
+
             </td>
 
             <td>
                 <table>
                     <tr>
-                        <td>Margen Neto</td>
-                        <td><input type="number" id="margen-neto" value="0"></td>
+                        <td colspan="2">
+                            <b>RESULTADOS:</b>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>% Margen Neto</td>
+                        <td><input type="number" id="margen-neto" value="0" readonly></td>
                     </tr>
                     <tr>
                         <td>Rotación de activos</td>
-                        <td><input type="number" id="rotacion-activos" value="0"></td>
+                        <td><input type="number" id="rotacion-activos" value="0" readonly></td>
                     </tr>
 
                     <tr>
                         <td>Apalancamiento Financiero</td>
-                        <td><input type="number" id="apalancamiento-financiero" value="0"></td>
+                        <td><input type="number" id="apalancamiento-financiero" value="0" readonly></td>
                     </tr>
                     <tr>
-                        <td>Rendimiento del Activo (ROA)</td>
-                        <td><input type="number" id="rendimiento-activo" value="0"></td>
+                        <td>% Rendimiento del Activo (ROA)</td>
+                        <td><input type="number" id="rendimiento-activo" value="0" readonly></td>
                     </tr>
                     <tr>
-                        <td>Rendimiento de Capital (ROE)</td>
-                        <td><input type="number" id="rendimiento-capital" value="0"></td>
+                        <td>% Rendimiento de Capital (ROE)</td>
+                        <td><input type="number" id="rendimiento-capital" value="0" readonly></td>
                     </tr>
 
                     <tr>
-                        <td>EVA</td>
-                        <td><input type="number" id="eva" value="0"></td>
+                        <td><b>EVA</b></td>
+                        <td><input type="number" id="eva" value="0" readonly></td>
                     </tr>
-
                 </table>
-
+                <table width="100%">
+                    <tr>
+                        <td style="border:2px solid #000">
+                            <div><b>CONCLUSIONES:</div></b>
+                            <div id="conclusion"></div>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
 
+
+<script>
+function limpiar(){
+    var elementos = document.getElementsByTagName('input');
+    for (let i = 0; i < elementos.length; i++) {
+        elementos[i].value=0;          
+    }
+    document.getElementById('conclusion').innerHTML ="";    
+}
+function calcular(){
+    let ventas = parseFloat(document.getElementById("ventas").value);  
+    let gastos = parseFloat(document.getElementById("gastos").value);  
+    let activos = parseFloat(document.getElementById("activos").value);  
+    let pasivos = parseFloat(document.getElementById("pasivos").value);  
+    let interes = parseFloat(document.getElementById("interes").value)/100;  
+    let renta = parseFloat(document.getElementById("renta").value)/100;  
+    let ganancia = parseFloat(document.getElementById("ganancia").value)/100;  
+
+    let totalPatrimonio = activos - pasivos;
+    let utilidadNeta = ventas - gastos;
+    let endeudamiento = pasivos / activos;
+    let propiedad = totalPatrimonio / activos ;
+    let cppc = ((propiedad*ganancia) + ((interes*endeudamiento)*(1-renta)));
+
+
+    let margenNeto = utilidadNeta/ventas;
+    let rotacionActivos = ventas/activos;
+    let apalancamientoFinanciero = activos / totalPatrimonio;
+    let rendimientoActivo = margenNeto*rotacionActivos;
+    let rendimientoCapital =apalancamientoFinanciero*rendimientoActivo;
+    let eva = (utilidadNeta+0) - (activos*cppc)
+    document.getElementById("margen-neto").value = (margenNeto*100).toFixed(2);
+    document.getElementById("rotacion-activos").value = rotacionActivos.toFixed(2);
+    document.getElementById("apalancamiento-financiero").value = apalancamientoFinanciero.toFixed(2);
+    document.getElementById("rendimiento-activo").value = (rendimientoActivo*100).toFixed(2);
+    document.getElementById("rendimiento-capital").value = (rendimientoCapital*100).toFixed(2);
+    document.getElementById("eva").value = eva.toFixed(2);
+
+    let conclusion ="";
+    if (eva > 0){
+        conclusion +='<div style="color:green">- TU NEGOCIO CREA VALOR</div>';
+    }else{
+        conclusion +='<div style="color:red">- TU NEGOCIO NO CREA VALOR</div>';
+    }
+    if (rendimientoCapital > interes){
+        conclusion +='<div style="color:green">- TU INVERSION ES RENTABLE</div>';
+    }else{
+        conclusion +='<div style="color:red">- TU INVERSION NO ES RENTABLE</div>';
+    }
+
+    document.getElementById('conclusion').innerHTML = conclusion;
+    
+}    
+
+
+
+</script>
 
 </body>
 </html>
